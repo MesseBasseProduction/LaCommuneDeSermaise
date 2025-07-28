@@ -2,7 +2,7 @@
 
 Dépôt contenant le code source du livre « La Commune de Sermaise décrite par Martin Eugène Legrand (1899) »
 
-![Première de couverture du livre](https://https://github.com/MesseBasseProduction/LaCommuneDeSermaise/main/cover/cover-recto.png "Première de couverture du livre")
+![Première de couverture du livre](cover/cover-recto.png "Première de couverture du livre")
 
 ### Information
 
