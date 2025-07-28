@@ -1,0 +1,309 @@
+\documentclass[french,twoside,a5paper,12pt]{book}
+% Messe Basse Production - 2021/2025
+% Version candidate n°1 du document, révision du 28 juillet 2025
+
+% Ce code source LaTeX est distribué sous la licence GPL-v3.0
+% This LaTeX source code is distributed using the GPL-v3.0 license
+
+%+-------------------------------------------------------------------------+%
+%|                                                                         |%
+%|                           Inclusions de paquets                         |%
+%|                                                                         |%
+%+-------------------------------------------------------------------------+%
+
+%    --------------------    Langage et typographie    -----------------    %
+\usepackage[utf8]{inputenc} % Encodage d'entrée
+\usepackage[french]{babel} % Typographie de la langue
+\usepackage[T1]{fontenc} % Gestion des caractères accentués
+\let\CheckCommand\providecommand % Suppresion du warning \showhyphens
+\usepackage[activate={true,nocompatibility},stretch=10,shrink=10]{microtype} % Micro ajustements typographiques
+\usepackage{url} % Insertion d'urls
+\usepackage{lmodern} % Latin modern font
+\usepackage[colorlinks=true,linkcolor=black,urlcolor=blue]{hyperref} % Liens hypertexte
+\usepackage{caption} % Sous titre d'une figure
+\usepackage{tabularx} % Tableaux customisables
+
+%    --------------------    Paquet graphiques    ----------------------    %
+\usepackage{graphicx} % Gestion des images
+\usepackage[export]{adjustbox} % Alignement des images
+
+%    --------------------    Modification du document    ---------------    %
+\usepackage{fancyhdr} % Tètes et pieds de pages
+\usepackage{titlesec} % Customisation titre de chapitre
+\usepackage{enumitem} % Customisation de liste
+\usepackage{tocloft} % Customisation de TOC
+\usepackage[tight]{shorttoc} % Multi TOC
+\usepackage{titletoc} % Gestion du niveau des éléments dans la TOC
+\usepackage{nonumonpart} % cacher le numéro de page sur les parties
+
+%    --------------------    Divers    ---------------------------------    %
+\usepackage{subfiles} % Multi fichiers
+\usepackage{nag} % Avertissement en cas d'utilisation de paquets obsolètes
+\usepackage{footnote} % Utiliser les footnotes dans différents env
+\usepackage{ifthen} % Conditions dans le corps du texte
+
+% Géométrie pour l'impression
+\usepackage[
+  paperwidth=15cm,
+  paperheight=21cm,
+  top=1.5cm,
+  bottom=1.5cm,
+  left=1cm,
+  right=1cm,
+  bindingoffset=1cm,
+  heightrounded,
+  headheight=1cm,
+  headsep=0.5cm,
+  footskip=1cm
+]{geometry}
+
+%+-------------------------------------------------------------------------+%
+%|                                                                         |%
+%|                         Configuration des paquets                       |%
+%|                                                                         |%
+%+-------------------------------------------------------------------------+%
+
+% Évite les conflits entre babel et enumitem ('enumitem')
+\frenchbsetup{StandardLists=true}
+
+% Paramétrage manuel des marges autour de table of content ('tocloft')
+\setlength{\cftbeforetoctitleskip}{10pt}
+\setlength{\cftaftertoctitleskip}{30pt}
+
+% Marge en début de chapitre
+\titleformat{\chapter}[display]
+{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{0pt}{40pt}
+
+% En-tête et pied de page ('fancyhdr')
+\pagestyle{fancy} % Style du document
+\setlength{\headheight}{15pt} % Hauteur de l'en-tête
+\renewcommand{\headrulewidth}{0pt} % Épaisseur de la règle (en-tête)
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\fancyhead[L]{}
+\fancyhead[R]{}
+\fancyfoot[LE]{\thepage}% LE -> Pages paires ; numéro à gauche
+\fancyfoot[C]{}
+\fancyfoot[RO]{\thepage}% RO -> Pages impaires ; numéro à droite
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[LE,RO]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+% Réduction de l'espacement sous le caption d'une figure
+\setlength{\belowcaptionskip}{-24pt}
+
+% Modifie l'espacement des chapitre dans les TOC
+\setlength{\cftbeforechapskip}{3pt}
+
+% Chemin vers les images
+\graphicspath{{../img/}}
+
+%+-------------------------------------------------------------------------+%
+%|                                                                         |%
+%|                             Commandes custom                            |%
+%|                                                                         |%
+%+-------------------------------------------------------------------------+%
+
+% Ajoute des points pour les chapitres* dans les TOC ('tocloft')
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
+
+% Ajout des chapitre/section non-numéraux à la toc avec la bonne marge gauche
+\newcommand{\addchapterline}[1]{%
+  \addcontentsline{toc}{chapter}{\protect\numberline{}#1}%
+}
+\newcommand{\addsectionline}[1]{%
+  \addcontentsline{toc}{section}{\protect\numberline{}#1}%
+}
+
+% Création d'une commande sommaire ('shorttoc')
+\newcommand{\sommaire}{\shorttoc{Sommaire}{0}} % Profondeur Part & Chapitre seulement
+\renewcommand*\descriptionlabel[1]{$#1$}
+
+% Commande de saut de page blanche
+\newcommand\blankpage{%
+  \null
+  \thispagestyle{empty}%
+  \newpage
+}
+
+%+-------------------------------------------------------------------------+%
+%|                                                                         |%
+%|                          Définition du document                         |%
+%|                                                                         |%
+%+-------------------------------------------------------------------------+%
+
+% Information et configuration du document
+\hypersetup{
+  pdfpagemode=UseOutlines,
+  pdftitle={La Commune de Sermaise (1899)},
+  pdfauthor={Arthur Beaulieu},
+  pdfsubject={La Commune de Sermaise décrite par Martin Eugène Legrand : monographie d'Instituteur (1899)},
+  pdfcreator={Arthur Beaulieu},
+  pdfcreationdate=D:20250728120000Z,
+  pdfmoddate=D:20250728120000Z,
+  pdfkeywords={Collection Empreinte d'Histoire, Commune de Sermaise, Monographie d'Instituteur, Martin Eugène Legand, Arthur Beaulieu, Messe Basse Production},
+  pdfinfo={
+    Version={v1.0},
+    Revision={1},
+    ISBN={979-10-978137-0-3},
+    Catalogue={MBPPB001}
+  },
+  pdfproducer={Messe Basse Production},
+  pdfdisplaydoctitle=true,
+  pdflang=FR,
+  pdfpagelayout=TwoPageRight,
+  bookmarksdepth=3,
+  urlcolor=black
+}
+
+\def\colorspace{CMYK} % Dossier d'image a selectionner selon le tye (print ou ebook)
+
+\begin{document}
+  % Page 1 de garde, à droite, première page après la couverture, vierge
+  \blankpage
+
+  % Page 2 verso de garde, vierge également
+  \blankpage
+
+  % Page 3, avant titre
+  \thispagestyle{empty}
+  \clearpage
+  \vspace*{\fill}
+  \begin{center}
+    \Huge{\textbf{La Commune de Sermaise}}
+  \end{center}
+  \vspace*{\fill}
+  \normalsize{}
+  \newpage
+
+  % Page 4 verso de l'avant titre, vierge ou mentionne d'autres ouvrages de l'auteur
+  \blankpage
+
+  % Page 5 page de titre
+  \thispagestyle{empty}
+  \clearpage
+  \begin{center}
+    \large{\bsc{Collection Empreinte d'Histoire}}\\
+    \vspace*{\fill}
+    \Huge{\textbf{La Commune de Sermaise}}\\
+    \large{décrite par Martin Eugène \bsc{Legrand} (1899)}\\
+    \vspace{24pt}
+    \large{\textit{Arthur Beaulieu}}\\
+    \vspace*{\fill}
+    \ifthenelse{\equal{\colorspace}{CMYK}}{\includegraphics[width=.2\textwidth]{CMYK/logo-mbp.jpg}\\}{\includegraphics[width=.2\textwidth]{RGB/logo-mbp.png}\\}
+    \vspace{12pt}
+    \large{\bsc{Messe Basse Production} --- 2025}
+  \end{center}
+  \vspace{-24pt}
+  \normalsize{}
+  \newpage
+
+  % Page 6 colophon du copyright + identification
+  \thispagestyle{empty}
+  \clearpage
+  \vspace*{\fill}
+  \begin{center}
+    \copyright\ Association \bsc{Messe Basse Production}, 2025\\
+    \textit{207 Rue du Clos Renard -- 91530, Sermaise}\\
+    \vspace{12pt}
+    ISBN 979-10-978137-0-3\\
+    Catalogue MBPPB001\\
+    \vspace{12pt}
+    \footnotesize{\textit{Le Code de la propriété intellectuelle et artistique n'autorisant, aux termes des alinéas 2 et 3 de l'article L.122-5, d'une part, que les \og copies ou reproductions strictement réservées à l'usage privé du copiste et non destinées à une utilisation collective \fg{} et, d'autre part, que les analyses et les courtes citations dans un but d'exemple et d'illustration, \og toute représentation ou reproduction intégrale, ou partielle, faite sans le consentement de l'auteur ou de ses ayants droit ou ayants cause, est illicite \fg{} (alinéa 1er de l'article L. 122-4). Cette représentation ou reproduction, par quelque procédé que ce soit, constituerait donc une contrefaçon sanctionnée par les articles L. 335-2 et suivants du Code de la propriété intellectuelle.}}
+  \end{center}
+  \vspace{-24pt}
+  \normalsize{}
+  \newpage
+
+  % Page 7 dédicace
+  \thispagestyle{empty}
+  \clearpage
+  \begin{flushright}
+    \textit{À tous les Sarmates, Sermesiennes, Sermesiens d'hier, d'aujourd'hui et de demain...}
+  \end{flushright}
+  \vspace*{\fill}
+  \newpage
+
+  % Page 8 verso de la dédicace, vierge
+  \blankpage
+
+  % Page 9 sommaire
+  \microtypesetup{protrusion=false}
+  \sommaire
+  \microtypesetup{protrusion=true}
+
+  % Début du livre
+  \newpage
+  \phantomsection
+  \addchapterline{Préface}
+  \subfile{subfiles/00-startx}
+
+  \part{Plan de la Commune}
+    \subfile{subfiles/01-map}
+
+  \part{Partie géographique}
+    \subfile{subfiles/02-geography}
+
+  \part{Esquisse historique}
+    \subfile{subfiles/03-history}
+
+  \part{Instruction publique}
+    \subfile{subfiles/04-instruction}
+
+  \cleardoublepage % Force la bonne pagination dans la toc (+1)
+  \phantomsection
+  \addcontentsline{toc}{part}{Plan général de l'école}
+  \part*{Plan général de l'école}
+    \subfile{subfiles/05-ecole}
+
+  % Sources ouvertes et bibliographie
+  \newpage
+  \addtocontents{toc}{\protect\addvspace{\baselineskip}} % Ajout d'espace dans la toc avant les sources
+  \cleardoublepage % Force la bonne pagination dans la toc (+1)
+  \begingroup % Création du group TOC Sources au niveau racine
+  \titlecontents{part}[20pt]{\normalsize\bfseries\vskip10pt}{}{}{\mdseries\cftdotfill{\cftdotsep}\bfseries\contentspage}
+  \phantomsection
+  \addcontentsline{toc}{part}{Sources}
+  \subfile{subfiles/06-sources}
+  \endgroup % Création du group TOC Sources au niveau racine
+
+  \blankpage
+
+  % Table des matières
+  \raggedbottom
+  \microtypesetup{protrusion=false}
+  \tableofcontents
+  \microtypesetup{protrusion=true}
+  \clearpage
+
+  % Page de césure
+  \newpage
+  \blankpage
+
+  % Remerciements
+  \subfile{subfiles/07-thanks}
+
+  % Colophon de l'impression
+  \thispagestyle{empty}
+  \clearpage
+  \vspace*{\fill}
+  \begin{center}
+    \textit{Imprimé en France}\\
+    \og \textbf{Imprimerie à Réaction} \fg{} (SAS Korus Imprimerie)\\
+    \textit{39 Rue du Breteil --- 33320, Eysines, BP70107}\\
+    \vspace{12pt}
+    Achèvement du tirage -- Août 2025\\
+    Dépôt légal -- Septembre 2025\\
+    \vspace{24pt}
+    \ifthenelse{\equal{\colorspace}{CMYK}}{\includegraphics[height=64pt]{CMYK/labels.jpg}}{\includegraphics[height=64pt]{RGB/labels.png}}
+  \end{center}
+  \vspace{-24pt}
+
+  % Denière page
+  \newpage
+  \blankpage
+\end{document}
